@@ -1,0 +1,12 @@
+services:
+  app:
+    container_name: techin8-malt
+    volumes:
+      - ./:/code
+
+  database:
+    container_name: techin8-malt-db
+    volumes:
+      - ./tests/data.sql:/var/lib/backup/data.sql
+    ports:
+      - ${POSTGRES_PORT:-3201}:5432
