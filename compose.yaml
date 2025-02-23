@@ -1,25 +1,25 @@
 services:
   app:
-    build: .
-    volumes:
-      - .:/app
+    build:
+      context: .
+      target: app
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      test: ["CMD", "curl", "-f", "http://localhost/docs"]
       timeout: 5s
       retries: 5
       start_period: 60s
     ports:
-      - "${APP_PORT:-3200}:8000"
+      - "${APP_PORT:-3200}:80"
     environment:
       ENV: development
-      DATABASE_URL: ${DATABASE_URL:-postgresql://app:${POSTGRES_PASSWORD:-password}@database:5432/${POSTGRES_DB:-data}}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://app:${POSTGRES_PASSWORD:-password}@database:5432/${POSTGRES_DB:-malt}}
     restart: unless-stopped
 
   database:
     restart: unless-stopped
     image: postgres:${POSTGRES_VERSION:-17}-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-data}
+      POSTGRES_DB: ${POSTGRES_DB:-malt}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_USER: ${POSTGRES_USER:-app}
     ports:
@@ -30,7 +30,7 @@ services:
           "CMD",
           "pg_isready",
           "-d",
-          "${POSTGRES_DB:-data}",
+          "${POSTGRES_DB:-malt}",
           "-U",
           "${POSTGRES_USER:-app}",
         ]

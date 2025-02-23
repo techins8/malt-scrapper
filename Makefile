@@ -79,7 +79,7 @@ init_log:
 # ----- APP
 
 malt: ## Exécute le script d'analyse
-	$(call DOCKER_EXEC_APP,python app/main.py $(script))
+	$(call DOCKER_EXEC_APP,python app/malt.py $(script))
 # ----- LINTER
 
 format: ## Formate le code avec Black

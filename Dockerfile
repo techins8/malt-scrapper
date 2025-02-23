@@ -1,33 +1,29 @@
-# Use Python 3.9 as base image
-FROM python:3.13-slim
+FROM python:3.12-slim AS builder
 
-# Set working directory
-WORKDIR /app
+WORKDIR /code
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-# Install system dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        build-essential \
-        curl \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    postgresql-client \
+    libpq-dev \
+    gcc \
+    libc6-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
-COPY requirements.txt .
+COPY ./requirements.txt /code/requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir uvicorn
+RUN pip install --upgrade pip; \
+    pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# Copy project files
-COPY . .
+FROM builder AS app
 
-# Expose port
-EXPOSE 8000
+WORKDIR /code
 
-# Command to run the application
-ENTRYPOINT ["python", "-m", "uvicorn"]
-CMD ["app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+COPY . /code
+
+RUN pip install --no-cache-dir -r requirements.txt && \
+    mkdir -p migrations/versions
+
+EXPOSE 80
+
+CMD ["uvicorn", "api:app", "--reload", "--app-dir", "app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80", "--log-level", "debug"]

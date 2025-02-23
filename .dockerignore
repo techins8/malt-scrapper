@@ -1,0 +1,10 @@
+venv
+.venv
+README.txt
+/tests/data.sql
+/var
+/.vscode
+/.github
+Dockerfile
+compose.*
+/tests/bruno
