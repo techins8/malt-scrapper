@@ -91,7 +91,7 @@ bruno: ## Formate le code avec Bruno
 
 # ----- DATABASE
 
-dbname=data
+dbname=malt
 migration: ## Génère une nouvelle migration Alembic
 	$(call DOCKER_EXEC_APP,alembic revision --autogenerate -m "$(msg)")
 

@@ -21,9 +21,9 @@ app = FastAPI(
     title="Malt Scraper API",
     description="API for scraping Malt freelancer profiles",
     version="1.0.0",
-    docs_url="/api/v1/docs",
-    redoc_url="/api/v1/redoc",
-    openapi_url="/api/v1/openapi.json",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
 )
 
 # Configure CORS
@@ -52,7 +52,7 @@ class ErrorResponse(BaseResponse):
 
 
 # Routes
-@app.get("/api/v1/health", response_model=SuccessResponse)
+@app.get("/api/health", response_model=SuccessResponse)
 async def health_check():
     """Health check endpoint."""
     return SuccessResponse(
@@ -70,7 +70,7 @@ async def root():
     )
 
 
-@app.get("/api/v1/profile", response_model=SuccessResponse)
+@app.get("/api/profile", response_model=SuccessResponse)
 async def profile(url: str, db: Session = Depends(get_db)):
     try:
         service = ProfileService(db)

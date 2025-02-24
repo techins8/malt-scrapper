@@ -112,10 +112,9 @@ class ExtractMaltInfo:
         # Extract locations
         location = None
         try:
-            location_elements = self.driver.find_elements(
+            location = self.wait_for_element(
                 By.CSS_SELECTOR, "[data-testid='profile-location-preference-address']"
-            )
-            location = [location.text for location in location_elements]
+            ).text.strip()
         except:
             print("Location not found")
 
@@ -159,12 +158,11 @@ class ExtractMaltInfo:
             print("Certifications not found")
 
         # Extract availability
-        availability: bool = None
+        availability: str = None
         try:
-            availability_text = self.wait_for_element(
+            availability = self.wait_for_element(
                 By.CLASS_NAME, "joy-availability", timeout=5
             ).get_attribute("title")
-            availability = availability_text == "Disponibilité confirmée"
         except TimeoutException:
             print("Availability not found")
 

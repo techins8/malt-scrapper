@@ -26,32 +26,37 @@ class ProfileStatus(str, Enum):
 class MaltProfile(Base):
     __tablename__ = "malt_profiles"
 
-    id = Column(Integer, primary_key=True, index=True)
-    profile_id = Column(String, unique=True, index=True)
-    fullname = Column(String, index=True)
-    title = Column(String)
-    experience_years = Column(Float)
-    daily_rate = Column(Float)
-    image_url = Column(String)
-    profile_url = Column(String)
-    locations = Column(JSON)  # List of locations
-    skills = Column(JSON)  # List of skills with levels
-    languages = Column(JSON)  # List of languages with levels
-    availability = Column(String)
-    missions_count = Column(Integer)
-    description = Column(String)
-    education = Column(JSON)  # List of education entries
-    experience = Column(JSON)  # List of work experiences
-    certifications = Column(JSON)  # List of certifications
-    status = Column(
+    id: str = Column(
+        String, primary_key=True, index=True, server_default=func.gen_random_uuid()
+    )
+    profile_id: str = Column(String, unique=True, index=True)
+    fullname: Optional[str] = Column(String, index=True)
+    title: Optional[str] = Column(String)
+    experience_years: Optional[str] = Column(String)
+    categories: Optional[List[dict]] = Column(JSON)  # List of categories
+    daily_rate: Optional[str] = Column(String)
+    image_url: Optional[str] = Column(String)
+    profile_url: Optional[str] = Column(String)
+    location: str = Column(String)  # location
+    work_locations: Optional[List[dict]] = Column(JSON)  # List of work locations
+    top_skills: Optional[List[dict]] = Column(JSON)  # List of top skills
+    skills: Optional[List[dict]] = Column(JSON)  # List of skills with levels
+    response_rate: Optional[str] = Column(String)
+    languages: Optional[List[dict]] = Column(JSON)  # List of languages with levels
+    availability: Optional[str] = Column(String)
+    missions_count: Optional[int] = Column(Integer)
+    description: Optional[str] = Column(String)
+    education: Optional[List[dict]] = Column(JSON)  # List of education entries
+    expertise_domains: Optional[List[dict]] = Column(JSON)  # List of expertise domains
+    experience: Optional[List[dict]] = Column(JSON)  # List of work experiences
+    certifications: Optional[List[dict]] = Column(JSON)  # List of certifications
+    status: ProfileStatus = Column(
         SQLAlchemyEnum(ProfileStatus), default=ProfileStatus.TODO, nullable=False
     )
 
+    last_scraped_at: Optional[datetime] = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     class Config:
         orm_mode = True
-
-    def __dict__(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
