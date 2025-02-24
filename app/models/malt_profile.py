@@ -1,7 +1,15 @@
 from datetime import datetime
 from enum import Enum
 from typing import List, Optional
-from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, Enum as SQLAlchemyEnum
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    JSON,
+    DateTime,
+    Enum as SQLAlchemyEnum,
+)
 from sqlalchemy.sql import func
 from app.core.database import Base
 
@@ -35,10 +43,15 @@ class MaltProfile(Base):
     education = Column(JSON)  # List of education entries
     experience = Column(JSON)  # List of work experiences
     certifications = Column(JSON)  # List of certifications
-    status = Column(SQLAlchemyEnum(ProfileStatus), default=ProfileStatus.TODO, nullable=False)
-    
+    status = Column(
+        SQLAlchemyEnum(ProfileStatus), default=ProfileStatus.TODO, nullable=False
+    )
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     class Config:
         orm_mode = True
+
+    def __dict__(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

@@ -8,6 +8,7 @@ class AppConfig(BaseSettings):
     HTTP_TOKEN: str
     SENTRY_DSN: str | None = None
     ENVIRONMENT: str = "local"
+    WORKSPACE_BASE_PATH: str = "var"
 
     model_config = SettingsConfigDict(
         env_file=(".env"),

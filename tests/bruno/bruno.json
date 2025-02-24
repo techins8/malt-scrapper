@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Malt Scrapper",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
