@@ -1,4 +1,4 @@
-# malt-scrapper
+# Profile Scrapper
 
 ## Installation
 ```bash
